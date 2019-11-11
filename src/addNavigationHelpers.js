@@ -4,6 +4,9 @@ import NavigationActions from './NavigationActions';
 import invariant from './utils/invariant';
 
 export default function(navigation) {
+
+  //  定义判断变量
+  let debounce = true;
   return {
     ...navigation,
     goBack: key => {
@@ -20,10 +23,20 @@ export default function(navigation) {
       );
     },
     navigate: (navigateTo, params, action) => {
+
       if (typeof navigateTo === 'string') {
-        return navigation.dispatch(
-          NavigationActions.navigate({ routeName: navigateTo, params, action })
-        );
+        // 当跳转开启，debounce为false，3秒内无法再次点击
+        window.setTimeout(() => {
+          debounce = true
+        }, 2000)
+
+        if (debounce === true) {
+          debounce = false
+          return navigation.dispatch(
+            NavigationActions.navigate({ routeName: navigateTo, params, action })
+          );
+        }
+
       }
       invariant(
         typeof navigateTo === 'object',
