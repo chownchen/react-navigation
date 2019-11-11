@@ -35,6 +35,8 @@ export default function(navigation) {
           return navigation.dispatch(
             NavigationActions.navigate({ routeName: navigateTo, params, action })
           );
+        } else {
+          return false
         }
 
       }
